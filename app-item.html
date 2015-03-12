@@ -1,0 +1,33 @@
+
+<polymer-element name="app-item" attributes="icon,name">
+    <template>
+        <style>
+            :host{
+                display: inline-block;
+                margin: 10px;
+                width: 90px;
+                height: 100px;
+                overflow:hidden;
+            }
+            *{
+                font-family: Roboto;
+                font-weight: 300;
+            }
+            img{
+                height: 80px;
+            }
+            center{
+                font-size: 16px;
+                width: 90px;
+            }
+        </style>
+
+        <img src='{{icon}}'/>
+        <center>{{name}}</center>
+    </template>
+
+    <script>
+        Polymer({
+        });
+    </script>
+</polymer-element>

@@ -1,0 +1,44 @@
+
+
+<polymer-element name="top-sites" attributes="">
+    <template>
+        <style>
+            *{
+                font-family: Roboto;
+                font-weight: 300;
+                font-size: 14px;
+            }
+            ul{
+                list-style-type: none;
+                -webkit-column-count: 4;
+            }
+            li{
+                padding:5px;
+            }
+        </style>
+        <ul>
+        <template repeat="{{site in topsites}}">
+            <li>
+                <img src='http://www.google.com/s2/favicons?domain={{site.domain}}'/>
+                <span class='domain'>{{site.domain}}</span>
+            </li>
+        </template>
+        </ul>
+    </template>
+
+    <script>
+        Polymer({
+            ready:function(){
+                this.topsites = [];
+                var self = this;
+                chrome.topSites.get(function(list){
+                    for(var i in list){
+                        list[i].icon = list[i].url.split('/').slice(0,3).join('/')+'/favicon.ico';
+                        list[i].domain = list[i].url.split('/').slice(2,3).join('/').replace('www.','');
+                        self.topsites.push(list[i]);
+                    }
+                });
+            }
+        });
+    </script>
+</polymer-element>
