@@ -10,11 +10,14 @@
         </style>
 
         <template repeat="{{app in apps}}">
-            <app-item name="{{app.name}}" icon="{{app.icon}}"></app-item>
+            <app-item app="{{app}}" name="{{app.name}}" icon="{{app.icon}}"></app-item>
         </template>
-        <hr/>
+
+        <br/><br/>
+        <br/><br/>
+
         <template repeat="{{app in links}}">
-            <app-item name="{{app.type}}" icon="{{app.icon}}"></app-item>
+            <app-item app="{{app}}" name="{{app.type}}" icon="{{app.icon}}"></app-item>
         </template>
     </template>
 
@@ -41,7 +44,14 @@
                     }
                     // setTimeout(function(){ $app.$apply(); },10);
 //                    setTimeout(defaultImage, 10);
+                    self.apps.sort(self.sortByName);
+                    self.links.sort(self.sortByName);
                 });
+            },
+            sortByName:function(a,b){
+                if (a.name < b.name)  return -1;
+                if (a.name > b.name) return 1;
+                return 0;
             }
 
         });

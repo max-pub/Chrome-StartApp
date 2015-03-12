@@ -3,7 +3,7 @@
   "description": "App Fast Start",
   "manifest_version": 2,
   "version": "1",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  //"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
 
     "chrome_url_overrides" : {
         "newtab": "csp.html"
@@ -27,6 +27,6 @@
   // },
 
   "offline_enabled": true,
-  "permissions": ["management","topSites"],
+  "permissions": ["management"],
   "icons": { "128": "favicon.ico" }
 }
