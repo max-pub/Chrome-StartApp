@@ -28,5 +28,10 @@
 
   "offline_enabled": true,
   "permissions": ["management"],
+    //,"identity"
+//    "client_id": "409685168748-06urc3pn8uknnd2vgar7bbedt4ri7hi2.apps.googleusercontent.com",
+  //  "scopes": [
+    //  "https://www.googleapis.com/auth/drive"
+    //],
   "icons": { "128": "favicon.ico" }
 }

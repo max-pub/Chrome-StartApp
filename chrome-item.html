@@ -14,11 +14,6 @@
                 font-family: Roboto;
                 font-weight: 300;
             }
-/*
-            img{
-                height: 80px;
-            }
-*/
             center{
                 font-size: 15px;
                 width: 75px;
@@ -42,7 +37,6 @@
             go:function(){
                 var self = this;
                 chrome.tabs.getCurrent(function(tab){
-//                    console.log('a',tab.url)
                     chrome.tabs.update(tab.id, {url:'chrome://'+self.url});
                 });
 //                chrome.tabs.create({url:'chrome://'+this.url});
