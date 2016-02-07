@@ -1,0 +1,64 @@
+<link rel="import" href="app-item.html">
+
+<dom-module id="app-list">
+    <template>
+        <style>
+
+        </style>
+
+        <template is="dom-repeat" items="{{apps}}">
+            <app-item app="{{item}}" name="{{item.name}}" icon="{{item.icon}}"></app-item>
+        </template>
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+
+        <template is="dom-repeat" items="{{links}}">
+            <app-item app="{{item}}" name="{{item.type}}" icon="{{item.icon}}"></app-item>
+        </template>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'app-list',
+            ready: function () {
+                //                var self = this;
+                chrome.management.getAll(function (list) {
+                    var apps = [];
+                    var links = [];
+                    console.log(list);
+                    for (var i in list) {
+                        // console.log('app',list[i]);
+                        var app = list[i];
+                        if (app.icons) app.icon = app.icons[app.icons.length - 1].url; //.replace('chrome://','');
+                        else app.icon = '';
+                        // app.icon2 = "<img src='"+app.icon+"'/>";
+                        // console.log(app.appLaunchUrl);
+                        // if(app.offlineEnabled) $scope.offline.push(app); //  && app.type=='packaged_app'
+                        if (app.type == 'packaged_app') apps.push(app);
+                        //                        else self.links.push(app);
+                        else if (app.type == 'legacy_packaged_app') links.push(app);
+                        else if (app.type == 'hosted_app') links.push(app); //$scope.links.push(app);
+                    }
+                    // setTimeout(function(){ $app.$apply(); },10);
+                    //                    setTimeout(defaultImage, 10);
+                    apps.sort(self.sortByName);
+                    links.sort(self.sortByName);
+                    links = links.slice(0, 10);
+                    this.set('apps', apps);
+                    this.set('links', links);
+                }.bind(this));
+            },
+            sortByName: function (a, b) {
+                if (a.name < b.name) return -1;
+                if (a.name > b.name) return 1;
+                return 0;
+            }
+
+        });
+    </script>
+</dom-module>

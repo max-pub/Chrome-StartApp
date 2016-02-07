@@ -3,32 +3,42 @@
 
 <!--BUILD IT-->
 <!--vulcanize --csp -o csp.html index.html-->
-
+<!--   vulcanize index.html --inline-script --inline-css | crisper --html _csp.html --js _csp.js  -->
+<!--vulcanize --inline-scripts --inline-css index.html | crisper --html csp.html --js csp.js-->
 
 <head>
 
-  <title>App Start</title>
+    <title>StartApp</title>
 
-  <meta name="viewport"
-    content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
-    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
-    <link href='bower_components/roboto-fontface/roboto-fontface.css' rel='stylesheet' type='text/css'>
+    <!--    <link href='bower_components/roboto-fontface/roboto-fontface.css' rel='stylesheet' type='text/css'>-->
 
-    <link rel="import" href="app-list.html">
-    <link rel="import" href="top-sites.html">
-    <link rel="import" href="chrome-item.html">
-    <link rel="import" href="bower_components/core-icons/hardware-icons.html">
-    <link rel="import" href="bower_components/core-icons/editor-icons.html">
-    <link rel="import" href="bower_components/core-icons/notification-icons.html">
+    <link rel="stylesheet" href="style.css">
+
+    <!--    <link rel="import" href="top-sites.html">-->
+    <link rel="import" href="components/chrome-item.html">
+    <link rel="import" href="components/app-list.html">
+    <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="bower_components/iron-icons/hardware-icons.html">
+    <link rel="import" href="bower_components/iron-icons/editor-icons.html">
+    <link rel="import" href="bower_components/iron-icons/notification-icons.html">
+
+
 </head>
 
 
 
 <body style='padding:7%;padding-top:3%;'>
     <center>
-<!--        https://chrome.google.com/webstore-->
+        <!-- https://passwords.google.com/settings/passwords -->
+        <!-- https://myaccount.google.com/preferences -->
+        <!-- https://myaccount.google.com/security#activity     -->
+
+
+        <!--        https://chrome.google.com/webstore-->
         <chrome-item name='Bookmarks' icon='bookmark' url="bookmarks"></chrome-item>
         <chrome-item name='History' icon='history' url="history"></chrome-item>
         <chrome-item name='Downloads' icon='file-download' url="downloads"></chrome-item>
@@ -37,21 +47,26 @@
         <chrome-item name='Clear Data' icon='clear' url="settings/clearBrowserData"></chrome-item>
     </center>
 
-    <br/><br/>
-    <br/><br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 
     <center>
         <app-list></app-list>
     </center>
-<!--
+    <!--
     <br/><br/>
 
     <top-sites></top-sites>
 -->
 
-    <br/><br/>
-    <br/><br/>
-    <br/><br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 
     <center>
         <chrome-item name='Fonts' icon='editor:format-size' url="settings/fonts"></chrome-item>
@@ -66,4 +81,5 @@
     </center>
 
 </body>
+
 </html>
