@@ -6,6 +6,7 @@
 <!--   vulcanize index.html --inline-script --inline-css | crisper --html _csp.html --js _csp.js  -->
 <!--vulcanize --inline-scripts --inline-css index.html | crisper --html csp.html --js csp.js-->
 
+
 <head>
 
     <title>StartApp</title>
@@ -21,8 +22,10 @@
     <!--    <link rel="import" href="top-sites.html">-->
     <link rel="import" href="components/chrome-item.html">
     <link rel="import" href="components/app-list.html">
+    <link rel="import" href="components/web-site.html">
     <link rel="import" href="bower_components/iron-icons/iron-icons.html">
     <link rel="import" href="bower_components/iron-icons/hardware-icons.html">
+    <link rel="import" href="bower_components/iron-icons/communication-icons.html">
     <link rel="import" href="bower_components/iron-icons/editor-icons.html">
     <link rel="import" href="bower_components/iron-icons/notification-icons.html">
 
@@ -33,12 +36,6 @@
 
 <body style='padding:7%;padding-top:3%;'>
     <center>
-        <!-- https://passwords.google.com/settings/passwords -->
-        <!-- https://myaccount.google.com/preferences -->
-        <!-- https://myaccount.google.com/security#activity     -->
-
-
-        <!--        https://chrome.google.com/webstore-->
         <chrome-item name='Bookmarks' icon='bookmark' url="bookmarks"></chrome-item>
         <chrome-item name='History' icon='history' url="history"></chrome-item>
         <chrome-item name='Downloads' icon='file-download' url="downloads"></chrome-item>
@@ -46,8 +43,46 @@
         <chrome-item name='Extensions' icon='extension' url="extensions"></chrome-item>
         <chrome-item name='Clear Data' icon='clear' url="settings/clearBrowserData"></chrome-item>
     </center>
+    <br/>
+    <br/>
+    <br/>
+
+    <center>
+        <web-site name='Maps' url='maps.google.com' icon='bin/maps.png'></web-site>
+        <web-site name='Music' url='music.google.com' icon='bin/music.png'></web-site>
+        <web-site name='Photos' url='photos.google.com' icon='bin/photos.png'></web-site>
+        <web-site name='Music' url='music.google.com' icon='bin/music.png'></web-site>
+        <web-site name='YouTube' url='youtube.com' icon='bin/youtube.png'></web-site>
+        <web-site name='Books' url='books.google.com/ebooks/app' icon='bin/books.png'></web-site>
+        <br/>
+        <web-site name='Gmail' url='mail.google.com' icon='bin/gmail.png'></web-site>
+        <web-site name='Contacts' url='contacts.google.com' icon='bin/contacts.png'></web-site>
+        <web-site name='Calendar' url='calendar.google.com' icon='bin/calendar.png'></web-site>
+        <web-site name='Keep' url='keep.google.com' icon='bin/keep.png'></web-site>
+        <web-site name='Translate' url='translate.google.com' icon='bin/translate.png'></web-site>
+        <web-site name='Hangouts' url='hangouts.google.com' icon='bin/hangouts.png'></web-site>
+        <br/>
+        <web-site name='Drive' url='drive.google.com' icon='bin/drive.png'></web-site>
+        <web-site name='Docs' url='docs.google.com' icon='bin/docs.png'></web-site>
+        <web-site name='Sheets' url='sheets.google.com' icon='bin/sheets.png'></web-site>
+        <web-site name='Slides' url='docs.google.com/slides' icon='bin/slides.png'></web-site>
+        <web-site name='Forms' url='docs.google.com/forms' icon='bin/forms.png'></web-site>
+        <web-site name='Drawings' url='music.google.com' icon='bin/drawings.png'></web-site>
+    </center>
 
     <br/>
+    <br/>
+    <br/>
+
+    <center>
+        <web-site name='Permissions' url='security.google.com/settings/security/permissions' font='hardware:security'></web-site>
+        <web-site name='Activity' url='security.google.com/settings/security/activity' font='icons:verified-user'></web-site>
+        <web-site name='Passwords' url='passwords.google.com/settings/passwords' font='communication:vpn-key'></web-site>
+        <web-site name='My Account' url='myaccount.google.com' font='icons:settings'></web-site>
+        <web-site name='Dashboard' url='www.google.com/settings/dashboard' font='icons:dashboard'></web-site>
+    </center>
+
+
     <br/>
     <br/>
     <br/>
@@ -60,10 +95,6 @@
 
     <top-sites></top-sites>
 -->
-
-    <br/>
-    <br/>
-    <br/>
     <br/>
     <br/>
     <br/>
@@ -80,6 +111,15 @@
         <chrome-item name='More' icon='view-headline' url="chrome-urls"></chrome-item>
     </center>
 
+    <br/>
+    <br/>
+    <br/>
+
+    <center>
+        <web-site name='Play Store' url='play.google.com' icon='bin/play.png'></web-site>
+        <web-site name='Chrome Store' url='chrome.google.com/webstore' icon='bin/chromewebstore.png'></web-site>
+        <web-site name='Device Store' url='store.google.com' icon='bin/store.png'></web-site>
+    </center>
 </body>
 
 </html>

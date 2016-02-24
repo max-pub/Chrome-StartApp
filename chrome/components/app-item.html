@@ -9,6 +9,7 @@
                 width: 90px;
                 height: 120px;
                 overflow: hidden;
+                position: relative;
             }
 
             center {
@@ -21,8 +22,36 @@
                 width: 80px;
                 height: 80px;
             }
-        </style>
 
+            iron-icon {
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 100;
+                background: black;
+                color: white;
+                -webkit-border-radius: 100px;
+                display: none;
+            }
+
+            :host:hover iron-icon {
+                display: block;
+            }
+
+            iron-icon:hover {
+                color: red;
+                cursor: pointer;
+            }
+        </style>
+        <!--
+        <div>
+            <button>XXX</button>
+            <img src="{{app.icon}}" on-tap="launch" />
+            <center>{{app.name}}</center>
+        </div>
+-->
+        <iron-icon icon='icons:close' on-tap="removeApp"></iron-icon>
+        <!--        <button>XXX</button>-->
         <paper-icon-button src="{{app.icon}}" on-tap="launch"></paper-icon-button>
         <center>{{app.name}}</center>
     </template>
@@ -40,6 +69,17 @@
                 });
                 //                if(this.app.appLaunchUrl) document.location = this.app.appLaunchUrl;
                 //                else chrome.management.launchApp(this.app.id);
+            },
+            removeApp: function () {
+                //                GG = this;
+                //                this.addClass('hidden');
+                chrome.management.uninstall(this.app.id, {
+                    showConfirmDialog: true
+                }, function () {
+                    this.parentElement.ready();
+                }.bind(this));
+                //                this.parentElement.ready();
+                //                this.$$('app-list').ready()
             }
         });
     </script>

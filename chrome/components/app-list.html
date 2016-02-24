@@ -13,9 +13,6 @@
         <br/>
         <br/>
         <br/>
-        <br/>
-        <br/>
-        <br/>
 
         <template is="dom-repeat" items="{{links}}">
             <app-item app="{{item}}" name="{{item.type}}" icon="{{item.icon}}"></app-item>
@@ -48,7 +45,7 @@
                     //                    setTimeout(defaultImage, 10);
                     apps.sort(self.sortByName);
                     links.sort(self.sortByName);
-                    links = links.slice(0, 10);
+                    //                    links = links.slice(0, 10);
                     this.set('apps', apps);
                     this.set('links', links);
                 }.bind(this));

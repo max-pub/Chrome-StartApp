@@ -1,0 +1,54 @@
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="web-site">
+    <template>
+        <style>
+            :host {
+                display: inline-block;
+                margin: 10px;
+                width: 75px;
+                height: 100px;
+                overflow: hidden;
+            }
+
+            center {
+                /*                font-size: 15px;*/
+                width: 75px;
+            }
+
+            paper-icon-button {
+                padding: 0;
+                color: #555;
+                width: 64px;
+                height: 64px;
+            }
+        </style>
+
+        <paper-icon-button src="{{icon}}" icon="{{font}}" on-mousedown="go"></paper-icon-button>
+        <center>{{name}}</center>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'web-site',
+            properties: {
+                icon: String,
+                name: String,
+                url: String,
+                font: String
+            },
+
+            //            ready: function () {
+            //                this.iconURL = chrome.extension.getURL(this.icon);
+            //                //                console.log('url', url);
+            //            },
+            go: function () {
+                chrome.tabs.getCurrent(function (tab) {
+                    chrome.tabs.update(tab.id, {
+                        url: 'http://' + this.url
+                    });
+                }.bind(this));
+            }
+        });
+    </script>
+</dom-module>

@@ -12118,6 +12118,17 @@ this.fire('dom-change');
                 });
                 //                if(this.app.appLaunchUrl) document.location = this.app.appLaunchUrl;
                 //                else chrome.management.launchApp(this.app.id);
+            },
+            removeApp: function () {
+                //                GG = this;
+                //                this.addClass('hidden');
+                chrome.management.uninstall(this.app.id, {
+                    showConfirmDialog: true
+                }, function () {
+                    this.parentElement.ready();
+                }.bind(this));
+                //                this.parentElement.ready();
+                //                this.$$('app-list').ready()
             }
         });
     
@@ -12147,7 +12158,7 @@ this.fire('dom-change');
                     //                    setTimeout(defaultImage, 10);
                     apps.sort(self.sortByName);
                     links.sort(self.sortByName);
-                    links = links.slice(0, 10);
+                    //                    links = links.slice(0, 10);
                     this.set('apps', apps);
                     this.set('links', links);
                 }.bind(this));
@@ -12158,5 +12169,28 @@ this.fire('dom-change');
                 return 0;
             }
 
+        });
+    
+;
+        Polymer({
+            is: 'web-site',
+            properties: {
+                icon: String,
+                name: String,
+                url: String,
+                font: String
+            },
+
+            //            ready: function () {
+            //                this.iconURL = chrome.extension.getURL(this.icon);
+            //                //                console.log('url', url);
+            //            },
+            go: function () {
+                chrome.tabs.getCurrent(function (tab) {
+                    chrome.tabs.update(tab.id, {
+                        url: 'http://' + this.url
+                    });
+                }.bind(this));
+            }
         });
     
