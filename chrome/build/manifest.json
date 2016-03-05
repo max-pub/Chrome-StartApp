@@ -1,15 +1,14 @@
 {
     "name": "StartApp",
-    "description": "Apps & Chrome",
+    "description": "Apps & Chrome & Google",
     "manifest_version": 2,
-    "version": "1",
+    "version": "1.2",
     "chrome_url_overrides": {
         "newtab": "csp.html"
     },
     "offline_enabled": true,
     "permissions": ["management"],
     "icons": {
-        "128": "icon.128.png",
-        "256": "icon.256.png"
+        "256": "bin/StartApp.256.png"
     }
 }

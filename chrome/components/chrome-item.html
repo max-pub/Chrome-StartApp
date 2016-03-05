@@ -37,12 +37,11 @@
                 url: String
             },
             go: function () {
-                var self = this;
                 chrome.tabs.getCurrent(function (tab) {
                     chrome.tabs.update(tab.id, {
-                        url: 'chrome://' + self.url
+                        url: 'chrome://' + this.url.split('/').slice(3).join('/')
                     });
-                });
+                }.bind(this));
                 //                chrome.tabs.create({url:'chrome://'+this.url});
                 //                window.open('chrome://'+this.url);
                 //                document.location = 'chrome://'+this.url;

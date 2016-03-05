@@ -6,8 +6,8 @@
             :host {
                 display: inline-block;
                 margin: 10px;
-                width: 90px;
-                height: 120px;
+                width: 75px;
+                height: 100px;
                 overflow: hidden;
                 position: relative;
             }
@@ -19,8 +19,8 @@
 
             paper-icon-button {
                 padding: 0;
-                width: 80px;
-                height: 80px;
+                width: 64px;
+                height: 64px;
             }
 
             iron-icon {
@@ -52,7 +52,7 @@
 -->
         <iron-icon icon='icons:close' on-tap="removeApp"></iron-icon>
         <!--        <button>XXX</button>-->
-        <paper-icon-button src="{{app.icon}}" on-tap="launch"></paper-icon-button>
+        <paper-icon-button src="{{app.icon}}" on-tap="click"></paper-icon-button>
         <center>{{app.name}}</center>
     </template>
 
@@ -62,14 +62,27 @@
             properties: {
                 app: Object
             },
-            launch: function () {
+            click: function () {
+                if(this.app.optionsUrl) this.showOptions();
+                else this.launchApp();
+                //                if(this.app.appLaunchUrl) document.location = this.app.appLaunchUrl;
+                //                else chrome.management.launchApp(this.app.id);
+            },
+            launchApp: function(){
                 chrome.management.launchApp(this.app.id);
                 chrome.tabs.getCurrent(function (tab) {
                     chrome.tabs.remove(tab.id)
                 });
-                //                if(this.app.appLaunchUrl) document.location = this.app.appLaunchUrl;
-                //                else chrome.management.launchApp(this.app.id);
             },
+            showOptions: function(){
+                chrome.tabs.getCurrent(function (tab) {
+                    console.log('options',this.app.optionsUrl);
+                    chrome.tabs.update(tab.id, {
+                        url: this.app.optionsUrl
+                    });
+                }.bind(this));
+            },
+
             removeApp: function () {
                 //                GG = this;
                 //                this.addClass('hidden');

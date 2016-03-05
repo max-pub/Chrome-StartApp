@@ -1,0 +1,135 @@
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../bower_components/iron-icons/notification-icons.html">
+
+<link rel="import" href="app-item.html">
+<link rel="import" href="chrome-item.html">
+<link rel="import" href="web-site.html">
+
+<script src="API.js"></script>
+
+
+<dom-module id="app-root">
+    <template>
+        <style>
+        </style>
+
+    <center>
+        <chrome-item name='Bookmarks' icon='bookmark' url="bookmarks"></chrome-item>
+        <chrome-item name='History' icon='history' url="history"></chrome-item>
+        <chrome-item name='Downloads' icon='file-download' url="downloads"></chrome-item>
+        <chrome-item name='Settings' icon='settings' url="settings"></chrome-item>
+        <chrome-item name='Extensions' icon='extension' url="extensions"></chrome-item>
+        <chrome-item name='Clear Data' icon='clear' url="settings/clearBrowserData"></chrome-item>
+    </center>
+
+    <br/>
+    <br/>
+
+    <center>
+        <h1>Apps</h1>
+        <web-site name='Chrome Store' url='chrome.google.com/webstore' icon='bin/chromewebstore.png'></web-site>
+
+        <template is="dom-repeat" items="{{apps}}">
+            <app-item app="{{item}}" name="{{item.name}}" icon="{{item.icon}}"></app-item>
+        </template>
+        <br/>
+        <template is="dom-repeat" items="{{links}}">
+            <app-item app="{{item}}" name="{{item.type}}" icon="{{item.icon}}"></app-item>
+        </template>
+    </center>
+
+    <br/>
+    <br/>
+
+    <center>
+        <h1>Google</h1>
+
+        <web-site name='Maps' url='maps.google.com' icon='bin/google/maps.png'></web-site>
+        <web-site name='YouTube' url='youtube.com' icon='bin/google/youtube.png'></web-site>
+        <web-site name='Music' url='music.google.com' icon='bin/google/music.png'></web-site>
+        <web-site name='Photos' url='photos.google.com' icon='bin/google/photos.png'></web-site>
+<!--         <web-site name='Books' url='books.google.com/ebooks/app' icon='bin/books.png'></web-site>
+        <web-site name='Plus' url='plus.google.com' icon='bin/plus.png'></web-site>
+ -->        <br/>
+        <web-site name='Gmail' url='mail.google.com' icon='bin/google/gmail.png'></web-site>
+        <web-site name='Contacts' url='contacts.google.com' icon='bin/google/contacts.png'></web-site>
+        <web-site name='Calendar' url='calendar.google.com' icon='bin/google/calendar.png'></web-site>
+        <web-site name='Keep' url='keep.google.com' icon='bin/google/keep.png'></web-site>
+<!--         <web-site name='Translate' url='translate.google.com' icon='bin/translate.png'></web-site>
+        <web-site name='Hangouts' url='hangouts.google.com' icon='bin/hangouts.png'></web-site>
+ -->        <br/>
+        <web-site name='Drive' url='drive.google.com' icon='bin/google/drive.png'></web-site>
+        <web-site name='Docs' url='docs.google.com' icon='bin/google/docs.png'></web-site>
+        <web-site name='Sheets' url='sheets.google.com' icon='bin/google/sheets.png'></web-site>
+        <web-site name='Slides' url='docs.google.com/slides' icon='bin/google/slides.png'></web-site>
+<!--         <web-site name='Forms' url='docs.google.com/forms' icon='bin/forms.png'></web-site>
+        <web-site name='Drawings' url='music.google.com' icon='bin/drawings.png'></web-site>
+ -->    
+    <br/>
+       <web-site name='Permissions' url='security.google.com/settings/security/permissions' font='hardware:security'></web-site>
+        <web-site name='Activity' url='security.google.com/settings/security/activity' font='icons:verified-user'></web-site>
+        <web-site name='Passwords' url='passwords.google.com/settings/passwords' font='communication:vpn-key'></web-site>
+        <web-site name='Account' url='myaccount.google.com' font='icons:settings'></web-site>
+     </center>
+
+    <br/>
+    <br/>
+
+<!--     <center>
+        <h1>Microsoft</h1>
+        <web-site name='Outlook' url='mail.live.com' icon='bin/outlook.png'></web-site>
+        <web-site name='Contacts' url='contacts.live.com' icon='bin/live.contacts.png'></web-site>
+        <web-site name='Calendar' url='calendar.live.com' icon='bin/live.calendar.png'></web-site>
+        <br/>
+        <web-site name='Word' url='office.live.com/start/word.aspx' icon='bin/word.png'></web-site>
+        <web-site name='Excel' url='office.live.com/start/Excel.aspx' icon='bin/excel.png'></web-site>
+        <web-site name='PowerPoint' url='office.live.com/start/PowerPoint.aspx' icon='bin/powerpoint.png'></web-site>
+        <web-site name='OneDrive' url='onedrive.live.com' icon='bin/onedrive.png'></web-site>
+    </center>
+
+    <br/>
+    <br/>
+ -->
+    <center>
+        <h1>Extensions</h1>
+
+        <template is="dom-repeat" items="{{extensionWithOptions}}">
+            <app-item app="{{item}}" name="{{item.type}}" icon="{{item.icon}}"></app-item>
+        </template>
+    </center>
+
+    <br/>
+    <br/>
+
+    <center>
+        <h1>Hidden Settings</h1>
+        <chrome-item name='Fonts' icon='editor:format-size' url="settings/fonts"></chrome-item>
+        <chrome-item name='Sync' icon='notification:sync' url="settings/syncSetup"></chrome-item>
+        <chrome-item name='Search Engines' icon='search' url="settings/searchEngines"></chrome-item>
+        <chrome-item name='Flags' icon='flag' url="flags"></chrome-item>
+        <chrome-item name='Plugins' icon='extension' url="plugins"></chrome-item>
+        <chrome-item name='Network' icon='settings-ethernet' url="net-internals/#events"></chrome-item>
+        <chrome-item name='Memory' icon='hardware:memory' url="memory-redirect"></chrome-item>
+        <chrome-item name='Inspect' icon='search' url="inspect/#extensions"></chrome-item>
+        <chrome-item name='More' icon='view-headline' url="chrome-urls"></chrome-item>
+    </center>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'app-root',
+            ready: function(){
+                API.load(function(){
+                    this.apps = API.apps;
+                    this.links = API.links;
+                    this.extensionWithOptions = API.extensionWithOptions;
+                }.bind(this));
+            }
+
+        });
+    </script>
+</dom-module>

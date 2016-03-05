@@ -45,7 +45,7 @@
             go: function () {
                 chrome.tabs.getCurrent(function (tab) {
                     chrome.tabs.update(tab.id, {
-                        url: 'http://' + this.url
+                        url: 'http://' + this.url.split('/').slice(3).join('/')
                     });
                 }.bind(this));
             }
