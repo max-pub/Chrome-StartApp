@@ -10176,6 +10176,96 @@ this.fire('dom-change');
   })();
 
 ;
+
+    Polymer({
+
+      is: 'iron-icon',
+
+      properties: {
+
+        /**
+         * The name of the icon to use. The name should be of the form:
+         * `iconset_name:icon_name`.
+         */
+        icon: {
+          type: String,
+          observer: '_iconChanged'
+        },
+
+        /**
+         * The name of the theme to used, if one is specified by the
+         * iconset.
+         */
+        theme: {
+          type: String,
+          observer: '_updateIcon'
+        },
+
+        /**
+         * If using iron-icon without an iconset, you can set the src to be
+         * the URL of an individual icon image file. Note that this will take
+         * precedence over a given icon attribute.
+         */
+        src: {
+          type: String,
+          observer: '_srcChanged'
+        },
+
+        /**
+         * @type {!Polymer.IronMeta}
+         */
+        _meta: {
+          value: Polymer.Base.create('iron-meta', {type: 'iconset'})
+        }
+
+      },
+
+      _DEFAULT_ICONSET: 'icons',
+
+      _iconChanged: function(icon) {
+        var parts = (icon || '').split(':');
+        this._iconName = parts.pop();
+        this._iconsetName = parts.pop() || this._DEFAULT_ICONSET;
+        this._updateIcon();
+      },
+
+      _srcChanged: function(src) {
+        this._updateIcon();
+      },
+
+      _usesIconset: function() {
+        return this.icon || !this.src;
+      },
+
+      /** @suppress {visibility} */
+      _updateIcon: function() {
+        if (this._usesIconset()) {
+          if (this._iconsetName) {
+            this._iconset = /** @type {?Polymer.Iconset} */ (
+              this._meta.byKey(this._iconsetName));
+            if (this._iconset) {
+              this._iconset.applyIcon(this, this._iconName, this.theme);
+              this.unlisten(window, 'iron-iconset-added', '_updateIcon');
+            } else {
+              this.listen(window, 'iron-iconset-added', '_updateIcon');
+            }
+          }
+        } else {
+          if (!this._img) {
+            this._img = document.createElement('img');
+            this._img.style.width = '100%';
+            this._img.style.height = '100%';
+            this._img.draggable = false;
+          }
+          this._img.src = this.src;
+          Polymer.dom(this.root).appendChild(this._img);
+        }
+      }
+
+    });
+
+  
+;
   /**
    * The `iron-iconset-svg` element allows users to define their own icon sets
    * that contain svg icons. The svg icon elements should be children of the
@@ -11099,385 +11189,6 @@ this.fire('dom-change');
 
 
 ;
-
-  /**
-   * `Polymer.PaperRippleBehavior` dynamically implements a ripple
-   * when the element has focus via pointer or keyboard.
-   *
-   * NOTE: This behavior is intended to be used in conjunction with and after
-   * `Polymer.IronButtonState` and `Polymer.IronControlState`.
-   *
-   * @polymerBehavior Polymer.PaperRippleBehavior
-   */
-  Polymer.PaperRippleBehavior = {
-
-    properties: {
-      /**
-       * If true, the element will not produce a ripple effect when interacted
-       * with via the pointer.
-       */
-      noink: {
-        type: Boolean,
-        observer: '_noinkChanged'
-      },
-
-      /**
-       * @type {Element|undefined}
-       */
-      _rippleContainer: {
-        type: Object,
-      }
-    },
-
-    /**
-     * Ensures a `<paper-ripple>` element is available when the element is
-     * focused.
-     */
-    _buttonStateChanged: function() {
-      if (this.focused) {
-        this.ensureRipple();
-      }
-    },
-
-    /**
-     * In addition to the functionality provided in `IronButtonState`, ensures
-     * a ripple effect is created when the element is in a `pressed` state.
-     */
-    _downHandler: function(event) {
-      Polymer.IronButtonStateImpl._downHandler.call(this, event);
-      if (this.pressed) {
-        this.ensureRipple(event);
-      }
-    },
-
-    /**
-     * Ensures this element contains a ripple effect. For startup efficiency
-     * the ripple effect is dynamically on demand when needed.
-     * @param {!Event=} optTriggeringEvent (optional) event that triggered the
-     * ripple.
-     */
-    ensureRipple: function(optTriggeringEvent) {
-      if (!this.hasRipple()) {
-        this._ripple = this._createRipple();
-        this._ripple.noink = this.noink;
-        var rippleContainer = this._rippleContainer || this.root;
-        if (rippleContainer) {
-          Polymer.dom(rippleContainer).appendChild(this._ripple);
-        }
-        if (optTriggeringEvent) {
-          // Check if the event happened inside of the ripple container
-          // Fall back to host instead of the root because distributed text
-          // nodes are not valid event targets
-          var domContainer = Polymer.dom(this._rippleContainer || this);
-          var target = Polymer.dom(optTriggeringEvent).rootTarget;
-          if (domContainer.deepContains( /** @type {Node} */(target))) {
-            this._ripple.uiDownAction(optTriggeringEvent);
-          }
-        }
-      }
-    },
-
-    /**
-     * Returns the `<paper-ripple>` element used by this element to create
-     * ripple effects. The element's ripple is created on demand, when
-     * necessary, and calling this method will force the
-     * ripple to be created.
-     */
-    getRipple: function() {
-      this.ensureRipple();
-      return this._ripple;
-    },
-
-    /**
-     * Returns true if this element currently contains a ripple effect.
-     * @return {boolean}
-     */
-    hasRipple: function() {
-      return Boolean(this._ripple);
-    },
-
-    /**
-     * Create the element's ripple effect via creating a `<paper-ripple>`.
-     * Override this method to customize the ripple element.
-     * @return {!PaperRippleElement} Returns a `<paper-ripple>` element.
-     */
-    _createRipple: function() {
-      return /** @type {!PaperRippleElement} */ (
-          document.createElement('paper-ripple'));
-    },
-
-    _noinkChanged: function(noink) {
-      if (this.hasRipple()) {
-        this._ripple.noink = noink;
-      }
-    }
-
-  };
-
-
-;
-
-  /** @polymerBehavior Polymer.PaperButtonBehavior */
-  Polymer.PaperButtonBehaviorImpl = {
-
-    properties: {
-
-      /**
-       * The z-depth of this element, from 0-5. Setting to 0 will remove the
-       * shadow, and each increasing number greater than 0 will be "deeper"
-       * than the last.
-       *
-       * @attribute elevation
-       * @type number
-       * @default 1
-       */
-      elevation: {
-        type: Number,
-        reflectToAttribute: true,
-        readOnly: true
-      }
-
-    },
-
-    observers: [
-      '_calculateElevation(focused, disabled, active, pressed, receivedFocusFromKeyboard)',
-      '_computeKeyboardClass(receivedFocusFromKeyboard)'
-    ],
-
-    hostAttributes: {
-      role: 'button',
-      tabindex: '0',
-      animated: true
-    },
-
-    _calculateElevation: function() {
-      var e = 1;
-      if (this.disabled) {
-        e = 0;
-      } else if (this.active || this.pressed) {
-        e = 4;
-      } else if (this.receivedFocusFromKeyboard) {
-        e = 3;
-      }
-      this._setElevation(e);
-    },
-
-    _computeKeyboardClass: function(receivedFocusFromKeyboard) {
-      this.toggleClass('keyboard-focus', receivedFocusFromKeyboard);
-    },
-
-    /**
-     * In addition to `IronButtonState` behavior, when space key goes down,
-     * create a ripple down effect.
-     *
-     * @param {!KeyboardEvent} event .
-     */
-    _spaceKeyDownHandler: function(event) {
-      Polymer.IronButtonStateImpl._spaceKeyDownHandler.call(this, event);
-      // Ensure that there is at most one ripple when the space key is held down.
-      if (this.hasRipple() && this.getRipple().ripples.length < 1) {
-        this._ripple.uiDownAction();
-      }
-    },
-
-    /**
-     * In addition to `IronButtonState` behavior, when space key goes up,
-     * create a ripple up effect.
-     *
-     * @param {!KeyboardEvent} event .
-     */
-    _spaceKeyUpHandler: function(event) {
-      Polymer.IronButtonStateImpl._spaceKeyUpHandler.call(this, event);
-      if (this.hasRipple()) {
-        this._ripple.uiUpAction();
-      }
-    }
-
-  };
-
-  /** @polymerBehavior */
-  Polymer.PaperButtonBehavior = [
-    Polymer.IronButtonState,
-    Polymer.IronControlState,
-    Polymer.PaperRippleBehavior,
-    Polymer.PaperButtonBehaviorImpl
-  ];
-
-
-;
-
-  /**
-   * `Polymer.PaperInkyFocusBehavior` implements a ripple when the element has keyboard focus.
-   *
-   * @polymerBehavior Polymer.PaperInkyFocusBehavior
-   */
-  Polymer.PaperInkyFocusBehaviorImpl = {
-
-    observers: [
-      '_focusedChanged(receivedFocusFromKeyboard)'
-    ],
-
-    _focusedChanged: function(receivedFocusFromKeyboard) {
-      if (receivedFocusFromKeyboard) {
-        this.ensureRipple();
-      }
-      if (this.hasRipple()) {
-        this._ripple.holdDown = receivedFocusFromKeyboard;
-      }
-    },
-
-    _createRipple: function() {
-      var ripple = Polymer.PaperRippleBehavior._createRipple();
-      ripple.id = 'ink';
-      ripple.setAttribute('center', '');
-      ripple.classList.add('circle');
-      return ripple;
-    }
-
-  };
-
-  /** @polymerBehavior Polymer.PaperInkyFocusBehavior */
-  Polymer.PaperInkyFocusBehavior = [
-    Polymer.IronButtonState,
-    Polymer.IronControlState,
-    Polymer.PaperRippleBehavior,
-    Polymer.PaperInkyFocusBehaviorImpl
-  ];
-
-
-;API = {
-    apps: [],
-    links: [],
-    extensionWithOptions: [],
-    other: [],
-
-    load: function(callback) {
-        chrome.management.getAll(function(list) {
-            console.log(list);
-            for (var i in list) {
-                var app = list[i];
-                if (app.icons) app.icon = app.icons[app.icons.length - 1].url; //.replace('chrome://','');
-                else app.icon = '';
-                if (app.type == 'packaged_app') API.apps.push(app);
-                else if (app.type == 'hosted_app') API.links.push(app);
-                else if (app.optionsUrl) API.extensionWithOptions.push(app);
-                else API.other.push(app);
-            }
-            API.apps.sort(API.sortByName);
-            API.links.sort(API.sortByName);
-            API.extensionWithOptions.sort(API.sortByName);
-            if (callback) callback();
-        });
-    },
-
-
-    sortByName: function(a, b) {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
-    }
-}
-
-
-
-// else if (app.type == 'legacy_packaged_app') links.push(app);
-// else if (app.type == 'hosted_app') links.push(app); //$scope.links.push(app);
-
-
-// app.icon2 = "<img src='"+app.icon+"'/>";
-// console.log(app.appLaunchUrl);
-// if(app.offlineEnabled) $scope.offline.push(app); //  && app.type=='packaged_app'
-;
-
-    Polymer({
-
-      is: 'iron-icon',
-
-      properties: {
-
-        /**
-         * The name of the icon to use. The name should be of the form:
-         * `iconset_name:icon_name`.
-         */
-        icon: {
-          type: String,
-          observer: '_iconChanged'
-        },
-
-        /**
-         * The name of the theme to used, if one is specified by the
-         * iconset.
-         */
-        theme: {
-          type: String,
-          observer: '_updateIcon'
-        },
-
-        /**
-         * If using iron-icon without an iconset, you can set the src to be
-         * the URL of an individual icon image file. Note that this will take
-         * precedence over a given icon attribute.
-         */
-        src: {
-          type: String,
-          observer: '_srcChanged'
-        },
-
-        /**
-         * @type {!Polymer.IronMeta}
-         */
-        _meta: {
-          value: Polymer.Base.create('iron-meta', {type: 'iconset'})
-        }
-
-      },
-
-      _DEFAULT_ICONSET: 'icons',
-
-      _iconChanged: function(icon) {
-        var parts = (icon || '').split(':');
-        this._iconName = parts.pop();
-        this._iconsetName = parts.pop() || this._DEFAULT_ICONSET;
-        this._updateIcon();
-      },
-
-      _srcChanged: function(src) {
-        this._updateIcon();
-      },
-
-      _usesIconset: function() {
-        return this.icon || !this.src;
-      },
-
-      /** @suppress {visibility} */
-      _updateIcon: function() {
-        if (this._usesIconset()) {
-          if (this._iconsetName) {
-            this._iconset = /** @type {?Polymer.Iconset} */ (
-              this._meta.byKey(this._iconsetName));
-            if (this._iconset) {
-              this._iconset.applyIcon(this, this._iconName, this.theme);
-              this.unlisten(window, 'iron-iconset-added', '_updateIcon');
-            } else {
-              this.listen(window, 'iron-iconset-added', '_updateIcon');
-            }
-          }
-        } else {
-          if (!this._img) {
-            this._img = document.createElement('img');
-            this._img.style.width = '100%';
-            this._img.style.height = '100%';
-            this._img.draggable = false;
-          }
-          this._img.src = this.src;
-          Polymer.dom(this.root).appendChild(this._img);
-        }
-      }
-
-    });
-
-  
-;
   (function() {
     var Utility = {
       distance: function(x1, y1, x2, y2) {
@@ -12077,6 +11788,253 @@ this.fire('dom-change');
   })();
 
 ;
+
+  /**
+   * `Polymer.PaperRippleBehavior` dynamically implements a ripple
+   * when the element has focus via pointer or keyboard.
+   *
+   * NOTE: This behavior is intended to be used in conjunction with and after
+   * `Polymer.IronButtonState` and `Polymer.IronControlState`.
+   *
+   * @polymerBehavior Polymer.PaperRippleBehavior
+   */
+  Polymer.PaperRippleBehavior = {
+
+    properties: {
+      /**
+       * If true, the element will not produce a ripple effect when interacted
+       * with via the pointer.
+       */
+      noink: {
+        type: Boolean,
+        observer: '_noinkChanged'
+      },
+
+      /**
+       * @type {Element|undefined}
+       */
+      _rippleContainer: {
+        type: Object,
+      }
+    },
+
+    /**
+     * Ensures a `<paper-ripple>` element is available when the element is
+     * focused.
+     */
+    _buttonStateChanged: function() {
+      if (this.focused) {
+        this.ensureRipple();
+      }
+    },
+
+    /**
+     * In addition to the functionality provided in `IronButtonState`, ensures
+     * a ripple effect is created when the element is in a `pressed` state.
+     */
+    _downHandler: function(event) {
+      Polymer.IronButtonStateImpl._downHandler.call(this, event);
+      if (this.pressed) {
+        this.ensureRipple(event);
+      }
+    },
+
+    /**
+     * Ensures this element contains a ripple effect. For startup efficiency
+     * the ripple effect is dynamically on demand when needed.
+     * @param {!Event=} optTriggeringEvent (optional) event that triggered the
+     * ripple.
+     */
+    ensureRipple: function(optTriggeringEvent) {
+      if (!this.hasRipple()) {
+        this._ripple = this._createRipple();
+        this._ripple.noink = this.noink;
+        var rippleContainer = this._rippleContainer || this.root;
+        if (rippleContainer) {
+          Polymer.dom(rippleContainer).appendChild(this._ripple);
+        }
+        if (optTriggeringEvent) {
+          // Check if the event happened inside of the ripple container
+          // Fall back to host instead of the root because distributed text
+          // nodes are not valid event targets
+          var domContainer = Polymer.dom(this._rippleContainer || this);
+          var target = Polymer.dom(optTriggeringEvent).rootTarget;
+          if (domContainer.deepContains( /** @type {Node} */(target))) {
+            this._ripple.uiDownAction(optTriggeringEvent);
+          }
+        }
+      }
+    },
+
+    /**
+     * Returns the `<paper-ripple>` element used by this element to create
+     * ripple effects. The element's ripple is created on demand, when
+     * necessary, and calling this method will force the
+     * ripple to be created.
+     */
+    getRipple: function() {
+      this.ensureRipple();
+      return this._ripple;
+    },
+
+    /**
+     * Returns true if this element currently contains a ripple effect.
+     * @return {boolean}
+     */
+    hasRipple: function() {
+      return Boolean(this._ripple);
+    },
+
+    /**
+     * Create the element's ripple effect via creating a `<paper-ripple>`.
+     * Override this method to customize the ripple element.
+     * @return {!PaperRippleElement} Returns a `<paper-ripple>` element.
+     */
+    _createRipple: function() {
+      return /** @type {!PaperRippleElement} */ (
+          document.createElement('paper-ripple'));
+    },
+
+    _noinkChanged: function(noink) {
+      if (this.hasRipple()) {
+        this._ripple.noink = noink;
+      }
+    }
+
+  };
+
+
+;
+
+  /** @polymerBehavior Polymer.PaperButtonBehavior */
+  Polymer.PaperButtonBehaviorImpl = {
+
+    properties: {
+
+      /**
+       * The z-depth of this element, from 0-5. Setting to 0 will remove the
+       * shadow, and each increasing number greater than 0 will be "deeper"
+       * than the last.
+       *
+       * @attribute elevation
+       * @type number
+       * @default 1
+       */
+      elevation: {
+        type: Number,
+        reflectToAttribute: true,
+        readOnly: true
+      }
+
+    },
+
+    observers: [
+      '_calculateElevation(focused, disabled, active, pressed, receivedFocusFromKeyboard)',
+      '_computeKeyboardClass(receivedFocusFromKeyboard)'
+    ],
+
+    hostAttributes: {
+      role: 'button',
+      tabindex: '0',
+      animated: true
+    },
+
+    _calculateElevation: function() {
+      var e = 1;
+      if (this.disabled) {
+        e = 0;
+      } else if (this.active || this.pressed) {
+        e = 4;
+      } else if (this.receivedFocusFromKeyboard) {
+        e = 3;
+      }
+      this._setElevation(e);
+    },
+
+    _computeKeyboardClass: function(receivedFocusFromKeyboard) {
+      this.toggleClass('keyboard-focus', receivedFocusFromKeyboard);
+    },
+
+    /**
+     * In addition to `IronButtonState` behavior, when space key goes down,
+     * create a ripple down effect.
+     *
+     * @param {!KeyboardEvent} event .
+     */
+    _spaceKeyDownHandler: function(event) {
+      Polymer.IronButtonStateImpl._spaceKeyDownHandler.call(this, event);
+      // Ensure that there is at most one ripple when the space key is held down.
+      if (this.hasRipple() && this.getRipple().ripples.length < 1) {
+        this._ripple.uiDownAction();
+      }
+    },
+
+    /**
+     * In addition to `IronButtonState` behavior, when space key goes up,
+     * create a ripple up effect.
+     *
+     * @param {!KeyboardEvent} event .
+     */
+    _spaceKeyUpHandler: function(event) {
+      Polymer.IronButtonStateImpl._spaceKeyUpHandler.call(this, event);
+      if (this.hasRipple()) {
+        this._ripple.uiUpAction();
+      }
+    }
+
+  };
+
+  /** @polymerBehavior */
+  Polymer.PaperButtonBehavior = [
+    Polymer.IronButtonState,
+    Polymer.IronControlState,
+    Polymer.PaperRippleBehavior,
+    Polymer.PaperButtonBehaviorImpl
+  ];
+
+
+;
+
+  /**
+   * `Polymer.PaperInkyFocusBehavior` implements a ripple when the element has keyboard focus.
+   *
+   * @polymerBehavior Polymer.PaperInkyFocusBehavior
+   */
+  Polymer.PaperInkyFocusBehaviorImpl = {
+
+    observers: [
+      '_focusedChanged(receivedFocusFromKeyboard)'
+    ],
+
+    _focusedChanged: function(receivedFocusFromKeyboard) {
+      if (receivedFocusFromKeyboard) {
+        this.ensureRipple();
+      }
+      if (this.hasRipple()) {
+        this._ripple.holdDown = receivedFocusFromKeyboard;
+      }
+    },
+
+    _createRipple: function() {
+      var ripple = Polymer.PaperRippleBehavior._createRipple();
+      ripple.id = 'ink';
+      ripple.setAttribute('center', '');
+      ripple.classList.add('circle');
+      return ripple;
+    }
+
+  };
+
+  /** @polymerBehavior Polymer.PaperInkyFocusBehavior */
+  Polymer.PaperInkyFocusBehavior = [
+    Polymer.IronButtonState,
+    Polymer.IronControlState,
+    Polymer.PaperRippleBehavior,
+    Polymer.PaperInkyFocusBehaviorImpl
+  ];
+
+
+;
     Polymer({
       is: 'paper-icon-button',
 
@@ -12209,6 +12167,48 @@ this.fire('dom-change');
             }
         });
     
+;API = {
+    apps: [],
+    links: [],
+    extensionWithOptions: [],
+    other: [],
+
+    load: function(callback) {
+        chrome.management.getAll(function(list) {
+            console.log(list);
+            for (var i in list) {
+                var app = list[i];
+                if (app.icons) app.icon = app.icons[app.icons.length - 1].url; //.replace('chrome://','');
+                else app.icon = '';
+                if (app.type == 'packaged_app') API.apps.push(app);
+                else if (app.type == 'hosted_app') API.links.push(app);
+                else if (app.optionsUrl) API.extensionWithOptions.push(app);
+                else API.other.push(app);
+            }
+            API.apps.sort(API.sortByName);
+            API.links.sort(API.sortByName);
+            API.extensionWithOptions.sort(API.sortByName);
+            if (callback) callback();
+        });
+    },
+
+
+    sortByName: function(a, b) {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+    }
+}
+
+
+
+// else if (app.type == 'legacy_packaged_app') links.push(app);
+// else if (app.type == 'hosted_app') links.push(app); //$scope.links.push(app);
+
+
+// app.icon2 = "<img src='"+app.icon+"'/>";
+// console.log(app.appLaunchUrl);
+// if(app.offlineEnabled) $scope.offline.push(app); //  && app.type=='packaged_app'
 ;
         Polymer({
             is: 'app-root',
@@ -12218,6 +12218,16 @@ this.fire('dom-change');
                     this.links = API.links;
                     this.extensionWithOptions = API.extensionWithOptions;
                 }.bind(this));
+            },
+            make: function(){
+                chrome.management.generateAppForLink('http://spiegel.de','spiegel.de',function(info){
+                    exin = info;
+                    console.log('info',info);
+                    chrome.management.createAppShortcut(info.id,function(short){
+                        sss= short;
+                        console.log(short);
+                    });
+                });                
             }
 
         });
