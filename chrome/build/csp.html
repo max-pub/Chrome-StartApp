@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><!--BUILD IT--><!--vulcanize --csp -o csp.html index.html--><!--   vulcanize index.html --inline-script --inline-css | crisper --html _csp.html --js _csp.js  --><!--vulcanize --inline-scripts --inline-css index.html | crisper --html build/csp.html --js build/csp.js--><head><meta charset="UTF-8">
+<!DOCTYPE html><html><!--BUILD IT--><!--vulcanize --inline-scripts --inline-css index.html | crisper --html build/csp.html --js build/csp.js--><head><meta charset="UTF-8">
 
     <title>StartApp</title>
 
@@ -1644,7 +1644,7 @@ Custom property | Description | Default
         <chrome-item name="More" icon="view-headline" url="chrome-urls"></chrome-item>
     </center>
 
-    <span on-tap="make">make</span>
+    <!-- <span on-tap='make'>make</span> -->
     </template>
 
     </dom-module>
